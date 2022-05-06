@@ -68,21 +68,21 @@ export class FindLockTrap extends Behaviors {
 
 
         // � uma porta?
-        let foundDoor = (this.lock.door?.id) ? `<p>${game.i18n.localize('OpenLock.MsgChat.Door')}${this.SpanColor(this.options.door.found)}</p>` : '';
-        let foundLock = `<p>${game.i18n.localize('OpenLock.MsgChat.hasLock')}${this.SpanColor(this.options.lock.found)}<p>`;
-        let haveKey = (this.options.lock.found) ? `<p>${game.i18n.localize('OpenLock.MsgChat.haveKey')}${this.SpanColor(this.options.keys.have)}</p>` : '';
-        // achei a chave // sei qual chave usar.
-        let imgkey = '';
-        if (!this.lock.keylock?.img) {
-            let k = game.items.find(key => key.name == this.lock.keylock);
-            imgkey = (k) ? `<p><img src=\"${k.img}\" width=\"30px\" />` : '';
-        } else {
-            imgkey = `<p><img src=\"${this.lock.keylock.img}\" width=\"30px\" />`;
-        }
-        let foundKey = (this.options.keys.found || this.options.keys.have) ? `${imgkey} <strong>${this.options.keys.name}</strong></p>` : '';
-        let foundTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.haveTrap')}${this.SpanColor(this.options.trap.found)}</p>`;
-        let content = foundDoor.concat(foundLock, haveKey, foundKey, foundTrap);
-        let title = `${game.i18n.localize('OpenLock.MsgChat.SearchTitle')} - ${this.target.name}`;
+        // let foundDoor = (this.lock.door?.id) ? `<p>${game.i18n.localize('OpenLock.MsgChat.Door')}${this.SpanColor(this.options.door.found)}</p>` : '';
+        // let foundLock = `<p>${game.i18n.localize('OpenLock.MsgChat.hasLock')}${this.SpanColor(this.options.lock.found)}<p>`;
+        // let haveKey = (this.options.lock.found) ? `<p>${game.i18n.localize('OpenLock.MsgChat.haveKey')}${this.SpanColor(this.options.keys.have)}</p>` : '';
+        // // achei a chave // sei qual chave usar.
+        // let imgkey = '';
+        // if (!this.lock.keylock?.img) {
+        //     let k = game.items.find(key => key.name == this.lock.keylock);
+        //     imgkey = (k) ? `<p><img src=\"${k.img}\" width=\"30px\" />` : '';
+        // } else {
+        //     imgkey = `<p><img src=\"${this.lock.keylock.img}\" width=\"30px\" />`;
+        // }
+        // let foundKey = (this.options.keys.found || this.options.keys.have) ? `${imgkey} <strong>${this.options.keys.name}</strong></p>` : '';
+        // let foundTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.haveTrap')}${this.SpanColor(this.options.trap.found)}</p>`;
+        // let content = foundDoor.concat(foundLock, haveKey, foundKey, foundTrap);
+        // let title = `${game.i18n.localize('OpenLock.MsgChat.SearchTitle')} - ${this.target.name}`;
 
         if (!this.lock.door || (this.lock.door && this.options.door.found)){
             //super.ModelChatMessager(title, content);
@@ -90,6 +90,8 @@ export class FindLockTrap extends Behaviors {
             console.log("foundLock ", hasFoundLock)
             console.log("foundTrap ", hasFoundTrap)
             console.log("hasKeys ", hasKeys)
+
+            let content = ""
 
             if (!hasFoundLock && !hasFoundTrap) {
                 
@@ -101,7 +103,7 @@ export class FindLockTrap extends Behaviors {
             }
 
             if (hasFoundLock) {      
-                content += "Although mostly mundane, it has a lock built into it.</p>"
+                content += "Although mostly mundane, it has a <strong>lock</strong> built into it.</p>"
                 if (hasKeys){
                     content += ""
                     let k = game.items.find(key => key.name == this.lock.keylock);
