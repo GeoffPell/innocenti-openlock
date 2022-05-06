@@ -18,9 +18,11 @@ export class Picklock extends OpenLock {
                 await this.lock.tools.rollToolCheck().then((result) => {
                     if (result.total >= this.lock.settings.openLock) {
                         this.options.lock.disarm = true;
+                        Hooks.callAll("innocenti-openlock.pickLock_Success");
                     } else {
+                        Hooks.callAll("innocenti-openlock.pickLock_Fail");
                         if (result.total <= (this.lock.settings.openLock - this.lock.settings.toolsBreak)) {
-                            this.options.tool.broke = true;
+                            this.options.tool.broke = true;                            
                         }
                     }
                     if (this.options.trap.have && !this.options.trap.disarm) {

@@ -15,13 +15,17 @@ export class Breaklock extends OpenLock {
             if (!this.lock.lock || !this.lock.settings?.enabled || this.options.lock.disarm || this.options.lock.broke) return;
             if (this.options.lock.have) {
                 this.roll = true;
+               
                 await this.token.actor.rollAbilityTest(`str`).then((result) => {
                     if (result.total >= this.lock.settings.forceLock) {
+                        Hooks.callAll("innocenti-openlock.breakLock_Success");
                         this.options.lock.broke = true;
                         this.options.lock.disarm = true;
                         if (this.options.trap.have && result.total >= (this.lock.settings.forceLock + this.lock.settings.toolsBreak)) {
-                            this.options.trap.disarm = true;
+                            this.options.trap.disarm = true;                            
                         }
+                    } else {
+                        Hooks.callAll("innocenti-openlock.breakLock_Fail");
                     }
                     if (this.options.trap.have && !this.options.trap.disarm) {
                         this.options.trap.trigger = true;

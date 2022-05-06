@@ -32,7 +32,7 @@ export class GMActions {
     async SetPermission() {
         let entityTarget = await game.actors.contents.find(a => a.id === this.targetToken.actor.id);
         this.perm = entityTarget.data.permission;
-        // Se já tenho permissão não preciso testar nada.
+        // Se jï¿½ tenho permissï¿½o nï¿½o preciso testar nada.
         if (this.data.door.have) return;
         if (this.perm[`${this.data.userid}`] && this.perm[`${this.data.userid}`] >= 2) return;
         if (!this.data.lock.have || this.data.keys.have || this.data.lock.disarm || this.data.lock.broke && !game.users.get(this.data.userid).isGM) {
@@ -45,12 +45,13 @@ export class GMActions {
     }
 
     async TriggerTrap() {
-        if (this.perm[`${this.data.userid}`] && this.perm[`${this.data.userid}`] >= 2) return;
+        //if (this.perm[`${this.data.userid}`] && this.perm[`${this.data.userid}`] >= 2) return;
         let tokenitem = await this.targetToken.actor.items.find(a => a.id === this.data.lock.have);
         if (this.data.trap.trigger && tokenitem.data.data.actionType !== '') {
+            Hooks.callAll("innocenti-openlock.triggerTrap");
             console.log("Tentando", tokenitem);
             tokenitem.roll();
-            //new MidiQOL.TrapWorkflow(this.targetToken.actor, tokenitem, [this.token], this.targetToken.center);
+            new MidiQOL.TrapWorkflow(this.targetToken.actor, tokenitem, [this.token], this.targetToken.center);
             let updates = await this.targetToken.actor.items.map(itemup => {
                 if (itemup.name === tokenitem.name)
                     return { id: itemup.id, data: { actionType: "" } }
@@ -71,6 +72,7 @@ export class GMActions {
     async RemoveItem(token, itemid) {
         let itemtools = token.actor.items.get(itemid);
         await token.actor.updateEmbeddedDocuments("Item", [{_id:itemtools.id}]);
+        Hooks.callAll("innocenti-openlock.destroyTools");
         if (itemtools.data.data.quantity - 1 >= 1) {
             let update = { _id: itemtools.id, "data.quantity": itemtools.data.data.quantity - 1 };
             await token.actor.updateEmbeddedDocuments("Item", [update]);
@@ -84,6 +86,7 @@ export class GMActions {
         let door = canvas.walls.get(this.data.door.have);
         if (!door) return;
         if (this.data.door.found && door.data.door == CONST.WALL_DOOR_TYPES.SECRET) {
+            Hooks.callAll("innocenti-openlock.showDoor");
             this.data.door.secret = CONST.WALL_DOOR_TYPES.DOOR;
             await door.update({ door: CONST.WALL_DOOR_TYPES.DOOR });
         }
@@ -96,6 +99,7 @@ export class GMActions {
             if ((this.data.door.found && door.data.door == CONST.WALL_DOOR_TYPES.SECRET) || door.data.door != CONST.WALL_DOOR_TYPES.SECRET) {
                 let ds = (this.data.door.locked == CONST.WALL_DOOR_STATES.LOCKED) ? CONST.WALL_DOOR_STATES.OPEN : CONST.WALL_DOOR_STATES.CLOSED//this.data.door.locked;
                 ds = (this.data.lock.broke) ? CONST.WALL_DOOR_STATES.OPEN : ds;
+                Hooks.callAll("innocenti-openlock.openDoor");
                 console.log(door, "DOOR")
                 await door.document.update({ ds: ds });
             }

@@ -13,6 +13,7 @@ export class FindLockTrap extends Behaviors {
         super.Check(this.target, this.token, distclose);
         if (this.denied) return;
         if (this.options.attemptsChecks >= 1 && !game.settings.get(SETTINGS.MODULE_NAME, "repeatCheck")) {
+            Hooks.callAll("innocenti-openlock.examinItem");
             ui.notifications.warn(game.i18n.format("OpenLock.Errors.invalidCheck", { token: this.token.name }));
         }
     }
@@ -51,6 +52,7 @@ export class FindLockTrap extends Behaviors {
                 }
                 if (result.total >= findTrap)
                     this.options.trap.found = (this.lock.trap) ? true : false;
+                    Hooks.callAll("innocenti-openlock.foundTrap");
             });
         }
         //console.log("Segue adiante", this.options);
@@ -58,7 +60,14 @@ export class FindLockTrap extends Behaviors {
 
     async ModelDialog() { }
     async ModelChatMessager() {
-        // è uma porta?
+
+        var hasFoundDoor = this.options.door.found
+        var hasFoundLock = this.options.lock.found
+        var hasKeys = this.options.keys.have
+        var hasFoundTrap = this.options.trap.found
+
+
+        // ï¿½ uma porta?
         let foundDoor = (this.lock.door?.id) ? `<p>${game.i18n.localize('OpenLock.MsgChat.Door')}${this.SpanColor(this.options.door.found)}</p>` : '';
         let foundLock = `<p>${game.i18n.localize('OpenLock.MsgChat.hasLock')}${this.SpanColor(this.options.lock.found)}<p>`;
         let haveKey = (this.options.lock.found) ? `<p>${game.i18n.localize('OpenLock.MsgChat.haveKey')}${this.SpanColor(this.options.keys.have)}</p>` : '';
@@ -74,7 +83,36 @@ export class FindLockTrap extends Behaviors {
         let foundTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.haveTrap')}${this.SpanColor(this.options.trap.found)}</p>`;
         let content = foundDoor.concat(foundLock, haveKey, foundKey, foundTrap);
         let title = `${game.i18n.localize('OpenLock.MsgChat.SearchTitle')} - ${this.target.name}`;
-        if (!this.lock.door || (this.lock.door && this.options.door.found))
-            super.ModelChatMessager(title, content);
+
+        if (!this.lock.door || (this.lock.door && this.options.door.found)){
+            //super.ModelChatMessager(title, content);
+
+            console.log("foundLock ", hasFoundLock)
+            console.log("foundTrap ", hasFoundTrap)
+            console.log("hasKeys ", hasKeys)
+
+            if (!hasFoundLock && !hasFoundTrap) {
+                
+                content = "This looks fairly mundane</p>"
+            }
+
+            if (hasFoundTrap){
+                content = `<strong>You have spotted a well hidden trap mechanism</strong></p>`
+            }
+
+            if (hasFoundLock) {      
+                content += "Although mostly mundane, it has a lock built into it.</p>"
+                if (hasKeys){
+                    content += ""
+                    let k = game.items.find(key => key.name == this.lock.keylock);
+                    imgkey = (k) ? `<p><img src=\"${k.img}\" width=\"30px\" />` : '';
+                    `${imgkey} <strong>${this.options.keys.name}</strong> looks like it will fit</p>`
+                }
+            }
+
+           super.ModelChatMessager("Inspected", content);
+
+
+        }
     }
 }
