@@ -23,12 +23,12 @@
 
   "OpenLock.MsgDialog": {
     "TrapAlert": "Warning!! Trap detected!",
-    "HaveKey": "You have the key to this chest",
-    "HasLock": "This chest is locked",
-    "Title": "Open Chest",
+    "HaveKey": "You have the key to this object",
+    "HasLock": "This object is locked",
+    "Title": "Open Object",
     "TitleCheck": "Check Traps",
-    "Content": "The chest is locked, how do you want to open it?",
-    "ContentCheck": "Did you find a chest what do you want to do?",
+    "Content": "The object is locked, how do you want to open it?",
+    "ContentCheck": "Did you find an object what do you want to do?",
     "ConsumableLock": "Lock",
     "TrapDisarm": "The trap has been successfully deactivated!"
   },

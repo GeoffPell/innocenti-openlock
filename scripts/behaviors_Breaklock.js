@@ -43,7 +43,7 @@ export class Breaklock extends OpenLock {
     async ModelData() {
         super.ModelData();
         let disarmLock = `<p>${game.i18n.localize('OpenLock.MsgChat.ToolOpen')} ${this.SpanColor(this.options.lock.broke)}</p>`;
-        let triggerTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.TrapOnOpen')} ${this.SpanColor(this.options.trap.trigger)}</p>`;
+        let triggerTrap = ""//`<p>${game.i18n.localize('OpenLock.MsgChat.TrapOnOpen')} ${this.SpanColor(this.options.trap.trigger)}</p>`;
         this.content = disarmLock.concat(triggerTrap);
     }
 

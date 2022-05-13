@@ -43,7 +43,7 @@ export class Picklock extends OpenLock {
         super.ModelData();
         let disarmLock = `<p>${game.i18n.localize('OpenLock.MsgChat.ToolOpen')} ${this.SpanColor(this.options.lock.disarm)}</p>`;
         let brokeTool = (this.options.tool.broke) ? `<p><hr/><img src=\"${this.lock.tools.img}\" width=\"30px\" /><strong> ${game.i18n.localize('OpenLock.MsgChat.BreakTools')}</strong></p>` : '';
-        let triggerTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.TrapOnOpen')} ${this.SpanColor(this.options.trap.trigger && !this.options.trap.disarm)}</p>`;
+        let triggerTrap = ""//`<p>${game.i18n.localize('OpenLock.MsgChat.TrapOnOpen')} ${this.SpanColor(this.options.trap.trigger && !this.options.trap.disarm)}</p>`;
         this.content = disarmLock.concat(triggerTrap, brokeTool);
     }
 

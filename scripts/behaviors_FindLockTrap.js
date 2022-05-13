@@ -87,9 +87,9 @@ export class FindLockTrap extends Behaviors {
         if (!this.lock.door || (this.lock.door && this.options.door.found)){
             //super.ModelChatMessager(title, content);
 
-            console.log("foundLock ", hasFoundLock)
-            console.log("foundTrap ", hasFoundTrap)
-            console.log("hasKeys ", hasKeys)
+            // console.log("foundLock ", hasFoundLock)
+            // console.log("foundTrap ", hasFoundTrap)
+            // console.log("hasKeys ", hasKeys)
 
             let content = ""
 

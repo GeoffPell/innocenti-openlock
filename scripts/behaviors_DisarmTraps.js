@@ -48,7 +48,7 @@ export class DisarmTraps extends OpenLock {
         if (this.options.trap.found || this.options.trap.trigger) {
             let disarmTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.TrapDisarm')} ${this.SpanColor(this.options.trap.disarm)}</p>`;
             let brokeTool = (this.options.tool.broke) ? `<p><hr/><img src=\"${this.lock.tools.img}\" width=\"30px\" /><strong> ${game.i18n.localize('OpenLock.MsgChat.BreakTools')}</strong></p>` : '';
-            let triggerTrap = `<p>${game.i18n.localize('OpenLock.MsgChat.TrapOnOpen')} ${this.SpanColor(this.options.trap.trigger)}</p>`;
+            let triggerTrap = ""//`<p>${game.i18n.localize('OpenLock.MsgChat.TrapOnOpen')} ${this.SpanColor(this.options.trap.trigger)}</p>`;
             this.content = disarmTrap.concat(triggerTrap, brokeTool);
         }
     }
